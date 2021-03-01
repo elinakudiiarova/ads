@@ -6,20 +6,33 @@ namespace Lab1_SortedLinkedList
     {
         static void Main(string[] args)
         {
-            var SorLinList = new MySortedLinkedList<int>();
+            var SorLinList = new MySortedLinkedList<string>();
             while (true)
             {
                 var elem = Console.ReadLine();
                 if (elem == "stop") break;
-                SorLinList.AddElement(int.Parse(elem));
+               SorLinList.AddElement(elem);
             }
- 
+            var currentNode = SorLinList.First;
+            while (currentNode != null)
+            {
+                Console.WriteLine(currentNode.Value);
+                currentNode = currentNode.Next;
+            }
+            
         }
     }
     class MySortedLinkedList<T>
     {
         LinkedList<T> myList = new LinkedList<T>(); // creating linked list
 
+        public LinkedListNode<T> First
+        {
+            get
+            {
+                return myList.First;
+            }
+        }
         public void AddElement(T elem)
         {
             if (myList.Count == 0)
@@ -31,7 +44,7 @@ namespace Lab1_SortedLinkedList
                 var currentNode = myList.First;
                 while (currentNode != null)
                 {
-                    if (Comparer<T>.Default.Compare(currentNode.Value, elem) == -1)
+                    if (Comparer<T>.Default.Compare(currentNode.Value, elem) == 1)
                     {
                         myList.AddBefore(currentNode, elem);
                         break;
@@ -39,6 +52,7 @@ namespace Lab1_SortedLinkedList
                     if (currentNode.Next == null)
                     {
                         myList.AddLast(elem);
+                        break;
                     }
                     currentNode = currentNode.Next;
 
