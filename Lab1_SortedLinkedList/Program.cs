@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 namespace Lab1_SortedLinkedList
 {
@@ -33,14 +34,31 @@ namespace Lab1_SortedLinkedList
         public Node<T> Next { get; set; }
     }
 
-    public class MySortedLinkedList<T> : IEnumerable<T>  // односвязный список
+    public class MySortedLinkedList<T> : IEnumerable<T>  // creating class for our list
     {
-        Node<T> head; // головной/первый элемент
-        Node<T> tail; // последний/хвостовой элемент
-        int Count;  // количество элементов в списке
+        Node<T> head; // firstElem
+        Node<T> tail; // lastElem
+        public int Count
+        {
+            get;
+            private set;
+        } // length of List
 
+        // сreating indexator
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable)this).GetEnumerator();
+        }
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            Node<T> current = head;
+            while (current != null)
+            {
+                yield return current.Data;
+                current = current.Next;
+            }
+        }
 
-            private int myVar;
 
         MySortedLinkedList<T> myList = new MySortedLinkedList<T>();
         public LinkedListNode<T> First
