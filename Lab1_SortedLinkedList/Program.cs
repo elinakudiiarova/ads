@@ -4,8 +4,9 @@ namespace Lab1_SortedLinkedList
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
+
             var SorLinList = new MySortedLinkedList<string>();
             while (true)
             {
@@ -22,15 +23,51 @@ namespace Lab1_SortedLinkedList
             
         }
     }
-    class MySortedLinkedList<T>
+    public class Node<T>
     {
-        LinkedList<T> myList = new LinkedList<T>(); // creating linked list
+        public Node(T data)
+        {
+            Data = data;
+        }
+        public T Data { get; set; }
+        public Node<T> Next { get; set; }
+    }
 
+    public class MySortedLinkedList<T> : IEnumerable<T>  // односвязный список
+    {
+        Node<T> head; // головной/первый элемент
+        Node<T> tail; // последний/хвостовой элемент
+        int Count;  // количество элементов в списке
+
+
+            private int myVar;
+
+        MySortedLinkedList<T> myList = new MySortedLinkedList<T>();
         public LinkedListNode<T> First
         {
             get
             {
                 return myList.First;
+            }
+        }
+
+        public int Count // 
+        {
+            get
+            {
+                return myList.Count;
+            }
+        }
+
+        public int FindElement(T elem)
+        {
+            int resultInd = -1;
+            while (true)
+            {
+                if (myList.Contains(elem))
+                {
+
+                }
             }
         }
         public void AddElement(T elem)
