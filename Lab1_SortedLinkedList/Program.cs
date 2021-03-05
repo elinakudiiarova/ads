@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 namespace Lab1_SortedLinkedList
 {
     class Program
     {
         static void Main()
         {
-
             var SorLinList = new MySortedLinkedList<string>();
             while (true)
             {
                 var elem = Console.ReadLine();
                 if (elem == "stop") break;
-               SorLinList.AddElement(elem);
+               SorLinList.Add(elem);
             }
             var currentNode = SorLinList.First;
             while (currentNode != null)
@@ -28,21 +28,27 @@ namespace Lab1_SortedLinkedList
     {
         public Node(T data)
         {
-            Data = data;
+            Value = data;
         }
-        public T Data { get; set; }
+        public T Value { get; set; }
         public Node<T> Next { get; set; }
     }
 
     public class MySortedLinkedList<T> : IEnumerable<T>  // creating class for our list
     {
         Node<T> head; // firstElem
-        Node<T> tail; // lastElem
         public int Count
         {
             get;
             private set;
         } // length of List
+
+        // first elem 
+        public Node<T> First
+        {
+            get;
+            private set;
+        }
 
         // сreating indexator
         IEnumerator IEnumerable.GetEnumerator()
@@ -54,65 +60,88 @@ namespace Lab1_SortedLinkedList
             Node<T> current = head;
             while (current != null)
             {
-                yield return current.Data;
+                yield return current.Value;
+                current = current.Next;
+            }
+        }
+
+        private IEnumerable<Node<T>> Nodes()
+        {
+            Node<T> current = head;
+            while (current != null)
+            {
+                yield return current;
                 current = current.Next;
             }
         }
 
 
-        MySortedLinkedList<T> myList = new MySortedLinkedList<T>();
-        public LinkedListNode<T> First
+        public void AddBefore(Node<T> NodeBeforeElem, T elem)
         {
-            get
-            {
-                return myList.First;
-            }
+            var newNode = new Node<T>(data: elem);
+            newNode.Next = NodeBeforeElem.Next;
+            NodeBeforeElem.Next = newNode;
+            
         }
-
-        public int Count // 
+  
+        public void Add(T elem)
         {
-            get
-            {
-                return myList.Count;
-            }
-        }
+            Node<T> node = new Node<T>(elem);
 
-        public int FindElement(T elem)
-        {
-            int resultInd = -1;
-            while (true)
-            {
-                if (myList.Contains(elem))
-                {
-
-                }
-            }
-        }
-        public void AddElement(T elem)
-        {
-            if (myList.Count == 0)
-            {
-                myList.AddFirst(elem);
-            }
+            if (head == null) head = node;
             else
             {
-                var currentNode = myList.First;
-                while (currentNode != null)
+                var currentNode = head;
+                Node<T> nodeBeforeCur = null;
+                while( currentNode != null)
                 {
-                    if (Comparer<T>.Default.Compare(currentNode.Value, elem) == 1)
+                    if(Comparer<T>.Default.Compare(currentNode.Value, elem) == 1)
                     {
-                        myList.AddBefore(currentNode, elem);
+                        if (nodeBeforeCur == null) 
+                            AddBefore(currentNode, elem); 
+                        else 
+                            AddBefore(nodeBeforeCur, elem);
                         break;
                     }
-                    if (currentNode.Next == null)
-                    {
-                        myList.AddLast(elem);
-                        break;
-                    }
-                    currentNode = currentNode.Next;
+             
+                   if (currentNode.Next == null)
+                   {
+                    currentNode.Next = new Node<T>(elem);
+                    break;
+                   }
+                    nodeBeforeCur = currentNode;
+                   currentNode = currentNode.Next;
 
                 }
             }
+            Count++;
         }
+
+        //public void AddElement(T elem)
+        //{
+        //    //if (myList.Count == 0)
+        //    //{
+        //    //    myList.AddFirst(elem);
+        //    //}
+        //    else
+        //    {
+        //        //var currentNode = myList.First;
+        //    //    while (currentNode != null)
+        //    //    {
+        //    //        if (Comparer<T>.Default.Compare(currentNode.Value, elem) == 1)
+        //    //        {
+        //    //            myList.AddBefore(currentNode, elem);
+        //    //            break;
+        //    //        }
+        //    //        if (currentNode.Next == null)
+        //    //        {
+        //    //            myList.AddLast(elem);
+        //    //            break;
+        //    //        }
+        //    //        currentNode = currentNode.Next;
+
+        //    //    }
+        //    //}
+        //}
     }
 }
