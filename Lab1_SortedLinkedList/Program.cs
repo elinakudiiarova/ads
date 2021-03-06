@@ -56,7 +56,7 @@ namespace Lab1_SortedLinkedList
                         break;
                     SorLinList.Add(elem);
                 }
-                SorLinList.insertDuplicate();
+                SorLinList.InsertDuplicate();
                 var currentNode = SorLinList.First;
                 while (currentNode != null)
                 {
@@ -176,7 +176,7 @@ namespace Lab1_SortedLinkedList
             }
 
 
-            public void insertDuplicate()
+            public void InsertDuplicate()
             {
                 Node<T> previousNode = null;
                 foreach ( Node<T> node in Nodes())
