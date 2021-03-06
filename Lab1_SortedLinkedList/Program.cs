@@ -56,6 +56,7 @@ namespace Lab1_SortedLinkedList
                         break;
                     SorLinList.Add(elem);
                 }
+                SorLinList.insertDuplicate();
                 var currentNode = SorLinList.First;
                 while (currentNode != null)
                 {
@@ -63,6 +64,7 @@ namespace Lab1_SortedLinkedList
                     currentNode = currentNode.Next;
                 }
             }
+            
         }
         public class Node<T>
         {
@@ -117,15 +119,22 @@ namespace Lab1_SortedLinkedList
                 }
             }
 
-
-            public void AddBefore(Node<T> NodeBeforeElem, T elem)
+            
+            public void AddAfter(Node<T> NodeBeforeElem, T elem)
             {
                 var newNode = new Node<T>(data: elem);
                 newNode.Next = NodeBeforeElem.Next;
                 NodeBeforeElem.Next = newNode;
-
+                Count++;
             }
 
+            public void AddFirst( T elem)
+            {
+                var newNode = new Node<T>(elem);
+                newNode.Next = head;
+                head = newNode;
+                Count++;
+            }
             public void Add(T elem)
             {
                 Node<T> node = new Node<T>(elem);
@@ -145,7 +154,11 @@ namespace Lab1_SortedLinkedList
                                 head = node;
                             }
                             else
-                                AddBefore(nodeBeforeCur, elem);
+                            {
+                                AddAfter(nodeBeforeCur, elem);
+                                return;
+                            }
+
                             break;
                         }
 
@@ -162,32 +175,42 @@ namespace Lab1_SortedLinkedList
                 Count++;
             }
 
-            //public void AddElement(T elem)
-            //{
-            //    //if (myList.Count == 0)
-            //    //{
-            //    //    myList.AddFirst(elem);
-            //    //}
-            //    else
-            //    {
-            //        //var currentNode = myList.First;
-            //    //    while (currentNode != null)
-            //    //    {
-            //    //        if (Comparer<T>.Default.Compare(currentNode.Value, elem) == 1)
-            //    //        {
-            //    //            myList.AddBefore(currentNode, elem);
-            //    //            break;
-            //    //        }
-            //    //        if (currentNode.Next == null)
-            //    //        {
-            //    //            myList.AddLast(elem);
-            //    //            break;
-            //    //        }
-            //    //        currentNode = currentNode.Next;
 
-            //    //    }
-            //    //}
-            //}
+            public void insertDuplicate()
+            {
+                Node<T> previousNode = null;
+                foreach ( Node<T> node in Nodes())
+                {
+                    if (previousNode == null && node.Next == null)
+                    {
+                        Add(node.Value);
+                    }
+                   else if (previousNode == null)
+                    {
+                        if (Comparer<T>.Default.Compare(node.Value, node.Next.Value) != 0)
+                        {
+                            AddFirst(node.Value);
+                        }
+                       
+                    }
+                    else if(node.Next == null)
+                    {
+                        if (Comparer<T>.Default.Compare(node.Value, previousNode.Value) != 0)
+                        {
+                            AddAfter(node, node.Value);
+                        }
+                    }
+                    else
+                    {
+                        if (Comparer<T>.Default.Compare(node.Value, previousNode.Value) != 0
+                           && Comparer<T>.Default.Compare(node.Value, node.Next.Value) != 0)
+                        {
+                            AddAfter(previousNode, node.Value);
+                        }
+                    }
+                    previousNode = node;
+                }
+            }
         }
     }
 }
