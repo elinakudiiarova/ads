@@ -8,6 +8,7 @@ namespace Lab1_SortedLinkedList
     {
         static void Main()
         {
+            
             var firElem = Console.ReadLine();
             if (int.TryParse(firElem, out var firstInt))
             {
@@ -20,12 +21,8 @@ namespace Lab1_SortedLinkedList
                         break;
                     SorLinList.Add(int.Parse(elem));
                 }
-                var currentNode = SorLinList.First;
-                while (currentNode != null)
-                {
-                    Console.WriteLine(currentNode.Value);
-                    currentNode = currentNode.Next;
-                }
+                Console.WriteLine($"List length: {SorLinList.Count}");
+                SorLinList.ListOutput();
             }
             else if (decimal.TryParse(firElem, out var first))
             {
@@ -38,12 +35,8 @@ namespace Lab1_SortedLinkedList
                         break;
                     SorLinList.Add(decimal.Parse(elem));
                 }
-                var currentNode = SorLinList.First;
-                while (currentNode != null)
-                {
-                    Console.WriteLine(currentNode.Value);
-                    currentNode = currentNode.Next;
-                }
+                Console.WriteLine($"List length: {SorLinList.Count}");
+                SorLinList.ListOutput();
             }
             else
             {
@@ -56,15 +49,10 @@ namespace Lab1_SortedLinkedList
                         break;
                     SorLinList.Add(elem);
                 }
-                SorLinList.InsertDuplicate();
-                var currentNode = SorLinList.First;
-                while (currentNode != null)
-                {
-                    Console.WriteLine(currentNode.Value);
-                    currentNode = currentNode.Next;
-                }
+                Console.WriteLine($"List length: {SorLinList.Count}");
+                SorLinList.ListOutput();
             }
-            
+
         }
         public class Node<T>
         {
@@ -118,8 +106,59 @@ namespace Lab1_SortedLinkedList
                     current = current.Next;
                 }
             }
+            // LIST SERACH 
 
+            public int SearchElem(T elem)
+            {
+                var currentNode = First;
+                var numbOfCurElement = 0;
+                while (currentNode != null)
+                {
+                    if(Comparer<T>.Default.Compare(currentNode.Value, elem) == 0) { return numbOfCurElement;}
+                    currentNode = currentNode.Next;
+                }
+                return -1;
             
+            }
+                             
+            // listOutputing
+            public void ListOutput()
+            {
+                var currentNode = First;
+                while (currentNode != null)
+                {
+                    Console.WriteLine(currentNode.Value);
+                    currentNode = currentNode.Next;
+                }
+            }
+
+            // is list is full
+            public bool IsEmpty()
+            {
+                if (Count == 0) 
+                    return true;
+                else
+                    return false;
+            }
+            
+            // deleteItem 
+
+            public void DeleteElem(T elemToDelete)
+            {
+                var currentNode = First;
+                Node<T> previousNode = null;
+                while (currentNode != null)
+                {
+                    if (Comparer<T>.Default.Compare(currentNode.Value, elemToDelete) == 0) {
+                        if (previousNode != null && currentNode != null)
+                        { previousNode.Next = currentNode.Next; }
+                        else if () { }
+                    } 
+                    previousNode = currentNode;
+                    currentNode = currentNode.Next; 
+                } 
+  
+            }
             public void AddAfter(Node<T> NodeBeforeElem, T elem)
             {
                 var newNode = new Node<T>(data: elem);
