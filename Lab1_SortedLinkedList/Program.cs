@@ -23,6 +23,12 @@ namespace Lab1_SortedLinkedList
                 }
                 Console.WriteLine($"List length: {SorLinList.Count}");
                 SorLinList.ListOutput();
+                Console.WriteLine("Find element");
+                int i = SorLinList.SearchElem(int.Parse(Console.ReadLine()));
+                Console.WriteLine($"{i}");
+                Console.WriteLine("Delete element");
+                SorLinList.DeleteElem(int.Parse(Console.ReadLine()));
+                SorLinList.ListOutput();
             }
             else if (decimal.TryParse(firElem, out var first))
             {
@@ -36,6 +42,12 @@ namespace Lab1_SortedLinkedList
                     SorLinList.Add(decimal.Parse(elem));
                 }
                 Console.WriteLine($"List length: {SorLinList.Count}");
+                SorLinList.ListOutput();
+                Console.WriteLine("Find element");
+                int i = SorLinList.SearchElem(decimal.Parse(Console.ReadLine()));
+                Console.WriteLine($"{i}");
+                Console.WriteLine("Delete element");
+                SorLinList.DeleteElem(decimal.Parse(Console.ReadLine()));
                 SorLinList.ListOutput();
             }
             else
@@ -51,7 +63,15 @@ namespace Lab1_SortedLinkedList
                 }
                 Console.WriteLine($"List length: {SorLinList.Count}");
                 SorLinList.ListOutput();
+                Console.WriteLine("Find element");
+                int i = SorLinList.SearchElem(Console.ReadLine());
+                Console.WriteLine($"{i}");
+                Console.WriteLine("Delete element");
+                SorLinList.DeleteElem(Console.ReadLine());
+                SorLinList.ListOutput();
+
             }
+
 
         }
         public class Node<T>
@@ -116,6 +136,7 @@ namespace Lab1_SortedLinkedList
                 {
                     if(Comparer<T>.Default.Compare(currentNode.Value, elem) == 0) { return numbOfCurElement;}
                     currentNode = currentNode.Next;
+                    numbOfCurElement++;
                 }
                 return -1;
             
@@ -135,7 +156,7 @@ namespace Lab1_SortedLinkedList
             // is list is full
             public bool IsEmpty()
             {
-                if (Count == 0) 
+                if (this.Any()) 
                     return true;
                 else
                     return false;
@@ -151,8 +172,18 @@ namespace Lab1_SortedLinkedList
                 {
                     if (Comparer<T>.Default.Compare(currentNode.Value, elemToDelete) == 0) {
                         if (previousNode != null && currentNode != null)
-                        { previousNode.Next = currentNode.Next; }
-                        else if () { }
+                        { previousNode.Next = currentNode.Next;
+                            Count--;
+                        }
+                        else if (currentNode.Next == null) {
+                            currentNode.Next = null;
+                            Count--;
+                        }
+                        else if(previousNode == null)
+                        {
+                            head = currentNode.Next;
+                            Count--;
+                        }
                     } 
                     previousNode = currentNode;
                     currentNode = currentNode.Next; 
