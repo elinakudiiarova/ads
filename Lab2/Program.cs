@@ -5,9 +5,14 @@ namespace Lab2
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Console.WriteLine("Hello World!");
+            var bt = new BBST<string>();
+            bt.Add("ten",10);
+            bt.Add("20", 20);
+            bt.Add("five", 5);
+            bt.Add("30", 30);
+            Console.WriteLine(bt.Find(5));
         }
     }
 
@@ -27,12 +32,12 @@ namespace Lab2
 
     public class BBST<T>
     {
-       private Node<T> root;
+        private Node<T> root;
         public int Height
         {
             get;
             private set;
-        } 
+        }
 
         public Node<T> Root
         {
@@ -48,18 +53,18 @@ namespace Lab2
 
             if (root == null) root = node;
             else
-            {   
+            {
                 var currentNode = root;
                 BinarySearch(currentNode, node);
-
-            }    
+            }
         }
+
 
         private void BinarySearch(Node<T> currentNode, Node<T> newNode)
         {
             if (currentNode.Key > newNode.Key)
             {
-                if(currentNode.Left == null)
+                if (currentNode.Left == null)
                 {
                     currentNode.Left = newNode;
                 }
@@ -79,6 +84,26 @@ namespace Lab2
                     BinarySearch(currentNode.Right, newNode);
                 }
             }
+        }
+
+        public T Find(int key)
+        {
+            var currentNode = root;
+            while(currentNode != null)
+            {
+                if (currentNode.Key == key) {
+                    return currentNode.Value;
+                }
+                if (currentNode.Key > key)
+                {
+                        currentNode = currentNode.Left;
+                }
+                else
+                {
+                        currentNode = currentNode.Right;
+                }
+            }
+            throw new Exception("Can't find key");
         }
     }
 }
