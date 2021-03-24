@@ -8,10 +8,11 @@ namespace Lab2
         static void Main()
         {
             var bt = new BBST<string>();
-            bt.Add("ten",10);
+            bt.Add("ten", 10);
             bt.Add("20", 20);
             bt.Add("five", 5);
             bt.Add("30", 30);
+            Console.WriteLine(bt.IsBalanced(bt.Root));
             Console.WriteLine(bt.Find(5));
         }
     }
@@ -33,11 +34,6 @@ namespace Lab2
     public class BBST<T>
     {
         private Node<T> root;
-        public int Height
-        {
-            get;
-            private set;
-        }
 
         public Node<T> Root
         {
@@ -56,54 +52,92 @@ namespace Lab2
             {
                 var currentNode = root;
                 BinarySearch(currentNode, node);
+                if(IsBalanced(currentNode) == false)
+                {
+                    
+                }
             }
         }
 
 
-        private void BinarySearch(Node<T> currentNode, Node<T> newNode)
+
+        public bool IsBalanced(Node<T> curNode)
         {
-            if (currentNode.Key > newNode.Key)
+            int dif = Height(curNode.Left) - Height(curNode.Right);
+            if(dif >= -1 && dif <= 1)
             {
-                if (currentNode.Left == null)
-                {
-                    currentNode.Left = newNode;
-                }
-                else
-                {
-                    BinarySearch(currentNode.Left, newNode);
-                }
+                return true;
+            }
+            return false;
+        }
+
+        private int Height(Node<T> currentNode)
+        {
+            if (currentNode == null)
+            {
+                return 0;
             }
             else
             {
-                if (currentNode.Right == null)
+                int left = Height(currentNode.Left);
+                int rDepth = Height(currentNode.Right);
+
+                if (left > rDepth)
                 {
-                    currentNode.Right = newNode;
+                    return left + 1;
                 }
                 else
                 {
-                    BinarySearch(currentNode.Right, newNode);
+                    return rDepth + 1;
                 }
             }
         }
 
-        public T Find(int key)
-        {
-            var currentNode = root;
-            while(currentNode != null)
+            private void BinarySearch(Node<T> currentNode, Node<T> newNode)
             {
-                if (currentNode.Key == key) {
-                    return currentNode.Value;
-                }
-                if (currentNode.Key > key)
+                if (currentNode.Key > newNode.Key)
                 {
-                        currentNode = currentNode.Left;
+                    if (currentNode.Left == null)
+                    {
+                        currentNode.Left = newNode;
+                    }
+                    else
+                    {
+                        BinarySearch(currentNode.Left, newNode);
+                    }
                 }
                 else
                 {
-                        currentNode = currentNode.Right;
+                    if (currentNode.Right == null)
+                    {
+                        currentNode.Right = newNode;
+                    }
+                    else
+                    {
+                        BinarySearch(currentNode.Right, newNode);
+                    }
                 }
             }
-            throw new Exception("Can't find key");
+
+            public T Find(int key)
+            {
+                var currentNode = root;
+                while (currentNode != null)
+                {
+                    if (currentNode.Key == key)
+                    {
+                        return currentNode.Value;
+                    }
+                    if (currentNode.Key > key)
+                    {
+                        currentNode = currentNode.Left;
+                    }
+                    else
+                    {
+                        currentNode = currentNode.Right;
+                    }
+                }
+                throw new Exception("Can't find key");
+            }
         }
     }
-}
