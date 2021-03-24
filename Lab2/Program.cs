@@ -42,6 +42,43 @@ namespace Lab2
             }
         }
 
-       
+        public void Add(T elem, int key)
+        {
+            Node<T> node = new Node<T>(elem, key);
+
+            if (root == null) root = node;
+            else
+            {   
+                var currentNode = root;
+                BinarySearch(currentNode, node);
+
+            }    
+        }
+
+        private void BinarySearch(Node<T> currentNode, Node<T> newNode)
+        {
+            if (currentNode.Key > newNode.Key)
+            {
+                if(currentNode.Left == null)
+                {
+                    currentNode.Left = newNode;
+                }
+                else
+                {
+                    BinarySearch(currentNode.Left, newNode);
+                }
+            }
+            else
+            {
+                if (currentNode.Right == null)
+                {
+                    currentNode.Right = newNode;
+                }
+                else
+                {
+                    BinarySearch(currentNode.Right, newNode);
+                }
+            }
+        }
     }
 }
