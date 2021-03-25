@@ -177,14 +177,14 @@ namespace Lab2
             node.Left = RemoveMinInSubtree(node.Left);
             return Balance(node);
         }
-        public T Find(int key)
+        public bool Find(int key)
         {
             var currentNode = root;
             while (currentNode != null)
             {
                 if (currentNode.Key == key)
                 {
-                    return currentNode.Value;
+                    return true;
                 }
                 if (currentNode.Key > key)
                 {
@@ -195,7 +195,7 @@ namespace Lab2
                     currentNode = currentNode.Right;
                 }
             }
-            throw new Exception("Can't find key");
+            return false;
         }
 
         public void PrintSorted()
@@ -246,10 +246,11 @@ namespace Lab2
         }
         //It finds the sum of keys in right son nodes in a BBST.
 
-        private List<int> Keys(Node<T> node) {
+        private List<int> Keys(Node<T> node)
+        {
             var keys = new List<int>();
 
-            if(node == null)
+            if (node == null)
             {
                 return keys;
             }
@@ -257,6 +258,20 @@ namespace Lab2
             keys.AddRange(Keys(node.Left));
             keys.AddRange(Keys(node.Right));
             return keys;
+        }
+
+        private List<Node<T>> Nodes(Node<T> node)
+        {
+            var nodes = new List<Node<T>>();
+
+            if (node == null)
+            {
+                return nodes;
+            }
+            nodes.Add(node);
+            nodes.AddRange(Nodes(node.Left));
+            nodes.AddRange(Nodes(node.Right));
+            return nodes;
         }
 
         public void DeleteEven()
@@ -270,25 +285,68 @@ namespace Lab2
             var keys = Keys(root);
             keys.Sort();
             int valueMid = (keys.First() + keys.Last()) / 2;
-            return keys.OrderBy(key => Math.Abs( valueMid - key)).First();
+            return keys.OrderBy(key => Math.Abs(valueMid - key)).First();
         }
 
-        public void DeleteDuplicate() {
+        public void DeleteDuplicate()
+        {
             var keys = Keys(root);
-            keys.GroupBy(elem => elem).Where(elem => elem.Count() > 1).ToList().ForEach(elem => { 
-            for(int i = 1; i < elem.Count(); i++)
+            keys.GroupBy(elem => elem).Where(elem => elem.Count() > 1).ToList().ForEach(elem =>
+            {
+                for (int i = 1; i < elem.Count(); i++)
                 {
                     Delete(elem.Key);
                 }
             });
         }
-        //It deletes all duplicate values from a BBST. (Result is also a BBST with a single value of each key.)
 
         public int FindSecondLargest()
         {
             var keys = Keys(root);
             return keys.OrderByDescending(k => k).Skip(1).First();
         }
-        //It returns the second largest key of a BBST without deleting it.
+
+        public BBST<T> CopyBBST()
+        {
+            var copiedTree = new BBST<T>();
+            copiedTree.root = CopyNode(this.root);
+            return copiedTree;
+        }//It creates and returns a copy of a given BBST.
+
+        private Node<T> CopyNode(Node<T> node)
+        {
+            var newNode = new Node<T>(node.Value, node.Key);
+            if (node.Left != null)
+            {
+                newNode.Left = CopyNode(node.Left);
+            }
+            if (node.Right != null)
+            {
+                newNode.Right = CopyNode(node.Right);
+            }
+            return newNode;
+        }
+
+        public void InsertBBST(BBST<T> bbst2)
+        {
+            var newNodes = bbst2.Nodes(bbst2.Root);
+            newNodes.ForEach(node => this.Add(node.Value, node.Key));
+
+        }
+        public bool ContainsBBST(BBST<T> bbst2)
+        {
+            var keys = Keys(bbst2.Root);
+            var contains = true;
+            foreach (int key in keys)
+            {
+                if (Find(key) == false)
+                {
+                    contains = false;
+                }
+            }
+            return contains;
+        }
+
+        IsBalanced(). //It returns true if the calling object is a balanced binary search tree, otherwise false.
     }
 }
