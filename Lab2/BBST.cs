@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Lab2
 {
@@ -17,8 +18,17 @@ namespace Lab2
             }
         }
 
+        public bool IsBalanced(Node<T> curNode)
+        {
+            int dif = Height(curNode.Left) - Height(curNode.Right);
+            if (dif >= -1 && dif <= 1)
+            {
+                return true;
+            }
+            return false;
+        }
 
-        private Node<T> BinarySearch(Node<T> currentNode, Node<T> newNode)
+        private Node<T> AddCore(Node<T> currentNode, Node<T> newNode)
         {
             if (currentNode.Key > newNode.Key)
             {
@@ -28,7 +38,7 @@ namespace Lab2
                 }
                 else
                 {
-                    currentNode.Left = Balance(BinarySearch(currentNode.Left, newNode));
+                    currentNode.Left = Balance(AddCore(currentNode.Left, newNode));
                 }
                 return Balance(currentNode);
             }
@@ -40,7 +50,7 @@ namespace Lab2
                 }
                 else
                 {
-                    currentNode.Right = Balance(BinarySearch(currentNode.Right, newNode));
+                    currentNode.Right = Balance(AddCore(currentNode.Right, newNode));
                 }
                 return Balance(currentNode);
             }
@@ -117,12 +127,56 @@ namespace Lab2
             else
             {
 
-                root = BinarySearch(root, node);
+                root = AddCore(root, node);
             }
         }
 
-        public void Delete()
+        public void Delete(int key)
+        {
+            Console.WriteLine(key);
+            root = DeleteCore(root, key);
+        }
 
+        private Node<T> DeleteCore(Node<T> node, int k)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+            if (k < node.Key)
+                node.Left = DeleteCore(node.Left, k);
+            else if (k > node.Key)
+                node.Right = DeleteCore(node.Right, k);
+            else //  k == node.Key
+            {
+                Node<T> l = node.Left;
+                Node<T> r = node.Right;
+                if (r == null)
+                {
+                    return l;
+                }
+                Node<T> min = FindMinInSubtree(r);
+                min.Right = RemoveMinInSubtree(r);
+                min.Left = l;
+                return Balance(min);
+            }
+            return Balance(node);
+        }
+
+        private Node<T> FindMinInSubtree(Node<T> node)
+        {
+            return node.Left != null ? FindMinInSubtree(node.Left) : node;
+        }
+
+        private Node<T> RemoveMinInSubtree(Node<T> node)
+        {
+            if (node.Left == null)
+            {
+                return node.Right;
+            }
+            node.Left = RemoveMinInSubtree(node.Left);
+            return Balance(node);
+        }
         public T Find(int key)
         {
             var currentNode = root;
@@ -192,9 +246,23 @@ namespace Lab2
         }
         //It finds the sum of keys in right son nodes in a BBST.
 
+        private List<int> Keys(Node<T> node) {
+            var keys = new List<int>();
+
+            if(node == null)
+            {
+                return keys;
+            }
+            keys.Add(node.Key);
+            keys.AddRange(Keys(node.Left));
+            keys.AddRange(Keys(node.Right));
+            return keys;
+        }
+
         public void DeleteEven()
         {
-
+            var keys = Keys(root);
+            keys.Where(k => k % 2 == 0).ToList().ForEach(k => Delete(k));
         }
     }
 }
