@@ -18,11 +18,11 @@ namespace Lab2
             bt.PrintSorted();
             Console.WriteLine(bt.CountNode(bt.Root));
             Console.WriteLine(bt.SumKeys(bt.Root));
-            Console.WriteLine(bt.IsBalanced(bt.Root));
+            Console.WriteLine(bt.IsBalanced());
             Console.WriteLine(bt.FindSecondLargest());
             bt.DeleteDuplicate();
             bt.DeleteEven();
-            
+
         }
     }
 

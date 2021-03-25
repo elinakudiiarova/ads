@@ -18,16 +18,6 @@ namespace Lab2
             }
         }
 
-        public bool IsBalanced(Node<T> curNode)
-        {
-            int dif = Height(curNode.Left) - Height(curNode.Right);
-            if (dif >= -1 && dif <= 1)
-            {
-                return true;
-            }
-            return false;
-        }
-
         private Node<T> AddCore(Node<T> currentNode, Node<T> newNode)
         {
             if (currentNode.Key > newNode.Key)
@@ -347,6 +337,29 @@ namespace Lab2
             return contains;
         }
 
-        IsBalanced(). //It returns true if the calling object is a balanced binary search tree, otherwise false.
+        public bool IsBalanced()
+        {
+            int dif = Height(root.Left) - Height(root.Right);
+            if (dif >= -1 && dif <= 1)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool EqualNode(Node<T> node1, Node<T> node2)
+        {
+            if (node1 == null || node2 == null)
+            {
+                return node1 == node2;
+            }
+            return node1.Key == node2.Key &&
+                EqualNode(node1.Left, node2.Left) &&
+                EqualNode(node1.Right, node2.Right);
+        }
+        public bool EqualsBBST(BBST<T> bbst2)
+        {
+            return EqualNode(bbst2.Root, this.Root);
+        }
     }
 }
