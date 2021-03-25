@@ -15,11 +15,11 @@ namespace Lab2
             bt.Add("25", 25);
             Console.WriteLine(bt.Find(5));
             bt.PrintSorted();
-            bt.DeleteEven();
             Console.WriteLine(bt.CountNode(bt.Root));
             Console.WriteLine(bt.SumKeys(bt.Root));
             Console.WriteLine(bt.IsBalanced(bt.Root));
-           
+            Console.WriteLine(bt.FindMiddle());
+            bt.DeleteEven();
         }
     }
 

@@ -264,5 +264,13 @@ namespace Lab2
             var keys = Keys(root);
             keys.Where(k => k % 2 == 0).ToList().ForEach(k => Delete(k));
         }
+
+        public int FindMiddle()
+        {
+            var keys = Keys(root);
+            keys.Sort();
+            int valueMid = (keys.First() + keys.Last()) / 2;
+            return keys.OrderBy(key => Math.Abs( valueMid - key)).First();
+        } //returns the tree key which is the nearest to the Valuemid = (keymin + keymax) / 2
     }
 }
