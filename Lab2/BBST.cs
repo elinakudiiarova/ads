@@ -271,6 +271,24 @@ namespace Lab2
             keys.Sort();
             int valueMid = (keys.First() + keys.Last()) / 2;
             return keys.OrderBy(key => Math.Abs( valueMid - key)).First();
-        } //returns the tree key which is the nearest to the Valuemid = (keymin + keymax) / 2
+        }
+
+        public void DeleteDuplicate() {
+            var keys = Keys(root);
+            keys.GroupBy(elem => elem).Where(elem => elem.Count() > 1).ToList().ForEach(elem => { 
+            for(int i = 1; i < elem.Count(); i++)
+                {
+                    Delete(elem.Key);
+                }
+            });
+        }
+        //It deletes all duplicate values from a BBST. (Result is also a BBST with a single value of each key.)
+
+        public int FindSecondLargest()
+        {
+            var keys = Keys(root);
+            return keys.OrderByDescending(k => k).Skip(1).First();
+        }
+        //It returns the second largest key of a BBST without deleting it.
     }
 }

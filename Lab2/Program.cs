@@ -13,13 +13,16 @@ namespace Lab2
             bt.Add("five", 5);
             bt.Add("30", 30);
             bt.Add("25", 25);
+            bt.Add("24", 25);
             Console.WriteLine(bt.Find(5));
             bt.PrintSorted();
             Console.WriteLine(bt.CountNode(bt.Root));
             Console.WriteLine(bt.SumKeys(bt.Root));
             Console.WriteLine(bt.IsBalanced(bt.Root));
-            Console.WriteLine(bt.FindMiddle());
+            Console.WriteLine(bt.FindSecondLargest());
+            bt.DeleteDuplicate();
             bt.DeleteEven();
+            
         }
     }
 
