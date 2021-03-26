@@ -49,16 +49,13 @@ namespace Lab2
 
         private Node<T> RotateRight(Node<T> node)
         {
-            // правый поворот вокруг p
-            {
-                Node<T> q = node.Left;
-                node.Left = q.Right;
-                q.Right = node;
-                return q;
-            }
+            Node<T> q = node.Left;
+            node.Left = q.Right;
+            q.Right = node;
+            return q;
         }
 
-        private Node<T> RotateLeft(Node<T> node) // левый поворот вокруг q
+        private Node<T> RotateLeft(Node<T> node)
         {
             Node<T> p = node.Right;
             node.Right = p.Left;
@@ -97,15 +94,15 @@ namespace Lab2
             else
             {
                 int left = Height(currentNode.Left);
-                int rDepth = Height(currentNode.Right);
+                int right = Height(currentNode.Right);
 
-                if (left > rDepth)
+                if (left > right)
                 {
                     return left + 1;
                 }
                 else
                 {
-                    return rDepth + 1;
+                    return right + 1;
                 }
             }
         }
@@ -137,7 +134,7 @@ namespace Lab2
                 node.Left = DeleteCore(node.Left, k);
             else if (k > node.Key)
                 node.Right = DeleteCore(node.Right, k);
-            else //  k == node.Key
+            else
             {
                 Node<T> l = node.Left;
                 Node<T> r = node.Right;
@@ -205,7 +202,7 @@ namespace Lab2
 
         }
 
-        public int CountNode(Node<T> node) // only left
+        public int CountNode(Node<T> node) 
         {
             int c = 0;
             if (node.Left != null)
@@ -234,7 +231,6 @@ namespace Lab2
 
             return sum;
         }
-        //It finds the sum of keys in right son nodes in a BBST.
 
         private List<int> Keys(Node<T> node)
         {
@@ -301,7 +297,7 @@ namespace Lab2
             var copiedTree = new BBST<T>();
             copiedTree.root = CopyNode(this.root);
             return copiedTree;
-        }//It creates and returns a copy of a given BBST.
+        }
 
         private Node<T> CopyNode(Node<T> node)
         {
@@ -360,6 +356,109 @@ namespace Lab2
         public bool EqualsBBST(BBST<T> bbst2)
         {
             return EqualNode(bbst2.Root, this.Root);
+        }
+
+        public BBST<T> SymmetricalBBST()
+        {
+            var copy = CopyBBST();
+            copy.root = SymmetricNode(copy.root);
+            return copy;
+        }
+
+        private Node<T> SymmetricNode(Node<T> node)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+            var left = Height(node.Left);
+            var right = Height(node.Right);
+            if (left == right)
+            {
+                node.Left = SymmetricNode(node.Left);
+                node.Right = SymmetricNode(node.Right);
+                return node;
+            }
+            if (left > right)
+            {
+                var newNode = RotateRight(node);
+                newNode.Left = SymmetricNode(newNode.Left);
+                if (newNode.Right != null)
+                {
+                    newNode.Right.Right = SymmetricNode(newNode.Right.Right);
+                }
+                return newNode;
+            }
+            else
+            {
+                var newNode = RotateLeft(node);
+                newNode.Right = SymmetricNode(newNode.Right);
+                if (newNode.Left != null)
+                {
+                    newNode.Left.Left = SymmetricNode(newNode.Left.Left);
+                }
+                return newNode;
+            }
+
+        }
+
+        public int FatherNode(int key)
+        {
+            var parNode = FindParentNode(root, key);
+            return parNode == null ? -10000 : parNode.Key;
+        }
+
+        public Node<T> FindParentNode(Node<T> node, int key)
+        {
+            if (node == null || node.Key == key)
+            {
+                return null;
+            }
+            if ((node.Left != null && node.Left.Key == key) || (node.Right != null && node.Right.Key == key))
+            {
+                return node;
+            }
+            if (node.Key > key)
+            {
+                return FindParentNode(node.Left, key);
+            }
+            else
+            {
+                return FindParentNode(node.Right, key);
+            }
+        }
+
+        public int CommonAncestor(int a, int b)
+        {
+            int max = Math.Max(a, b);
+            int min = Math.Min(a, b);
+            var res = FindAncestor(root, min, max);
+            if (res == null)
+            {
+                return -100000;
+            }
+            return res.Key;
+        }
+
+        private Node<T> FindAncestor(Node<T> node, int min, int max)
+        {
+            if (node == null)
+            {
+                return null;
+            }
+            if (min < node.Key && max > node.Key)
+            {
+                return node;
+            }
+            if (min > node.Key)
+            {
+                return FindAncestor(node.Right, min, max);
+            }
+            if (max < node.Key)
+            {
+                return FindAncestor(node.Left, min, max);
+            }
+            return null;
         }
     }
 }
